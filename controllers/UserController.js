@@ -5,7 +5,7 @@ const create = async (req, res) => {
   try {
     const { displayName, email, password, image } = req.body;
     await UserService.create({ displayName, email, password, image });
-    const token = creatToken(displayName, email);
+    const token = creatToken(email);
     return res.status(201).json(token);
   } catch (error) {
     return res.status(error.status).json({ message: error.message });

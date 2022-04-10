@@ -3,8 +3,8 @@ require('dotenv').config();
 
 const SECRET_KEY = process.env.JWT_SECRET;
 
-const creatToken = (displayName, email) => {
-  const token = jwt.sign({ displayName, email }, SECRET_KEY, {
+const creatToken = (email) => {
+  const token = jwt.sign({ email }, SECRET_KEY, {
     expiresIn: '1d',
     algorithm: 'HS256',
   });
