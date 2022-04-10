@@ -16,6 +16,13 @@ const getUserForAuth = async (userEmail) => {
   return user;
  };
 
+const getById = async (id) => {
+  const user = await User.findByPk(Number(id)); 
+  if (!user) throw userError(404, 'User does not exist');
+  
+  return user;
+};
+ 
 const create = async ({ displayName, email, password, image }) => {
   const { error } = userValidate.validate({ displayName, email, password, image });
   if (error) throw userError(400, error.message);
@@ -32,4 +39,5 @@ module.exports = {
   create,
   getAll,
   getUserForAuth,
+  getById,
 };
