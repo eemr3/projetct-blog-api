@@ -2,6 +2,20 @@ const { User } = require('../models');
 const userValidate = require('../schemas/userSchema');
 const userError = require('../utils/userError');
 
+const getAll = async () => {
+  const users = await User.findAll({
+    attributes: { exclude: ['password'] },
+  });
+  
+  return users;
+};
+
+const getUserForAuth = async (userEmail) => {
+  const user = await User.findOne({ where: { email: userEmail } });
+
+  return user;
+ };
+
 const create = async ({ displayName, email, password, image }) => {
   const { error } = userValidate.validate({ displayName, email, password, image });
   if (error) throw userError(400, error.message);
@@ -16,4 +30,6 @@ const create = async ({ displayName, email, password, image }) => {
 
 module.exports = {
   create,
+  getAll,
+  getUserForAuth,
 };
