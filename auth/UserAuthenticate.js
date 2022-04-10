@@ -3,7 +3,7 @@ require('dotenv').config();
 
 const SECRET_KEY = process.env.JWT_SECRET;
 
-const creatToken = (user) => {
+const createToken = (user) => {
   const token = jwt.sign({ data: user }, SECRET_KEY, {
     expiresIn: '1d',
     algorithm: 'HS256',
@@ -22,6 +22,6 @@ const decoderToken = (token) => {
 };
 
 module.exports = {
-  creatToken,
+  createToken,
   decoderToken,
 };
