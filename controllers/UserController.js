@@ -1,4 +1,4 @@
-const { creatToken } = require('../auth/UserAuthenticate');
+const { createToken } = require('../auth/UserAuthenticate');
 const UserService = require('../services/UserService');
 
 const getAll = async (_req, res) => {
@@ -12,7 +12,7 @@ const create = async (req, res) => {
     const { displayName, email, password, image } = req.body;
     const user = await UserService.create({ displayName, email, password, image });
     
-    const token = creatToken(user);
+    const token = createToken(user);
     return res.status(201).json(token);
   } catch (error) {
     return res.status(error.status).json({ message: error.message });
