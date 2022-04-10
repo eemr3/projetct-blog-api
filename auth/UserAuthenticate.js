@@ -3,8 +3,8 @@ require('dotenv').config();
 
 const SECRET_KEY = process.env.JWT_SECRET;
 
-const creatToken = (email) => {
-  const token = jwt.sign({ email }, SECRET_KEY, {
+const creatToken = (user) => {
+  const token = jwt.sign({ data: user }, SECRET_KEY, {
     expiresIn: '1d',
     algorithm: 'HS256',
   });
@@ -12,6 +12,16 @@ const creatToken = (email) => {
   return token;
 };
 
+const decoderToken = (token) => {
+  try {
+    const decoder = jwt.verify(token, SECRET_KEY);
+    return decoder;
+  } catch (error) {
+    return false;
+  }
+};
+
 module.exports = {
   creatToken,
+  decoderToken,
 };
