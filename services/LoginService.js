@@ -1,7 +1,7 @@
 const { createToken } = require('../auth/UserAuthenticate');
 const { User } = require('../models');
 const validateLogin = require('../schemas/loginSchema');
-const userError = require('../utils/userError');
+const userError = require('../utils/codeAndMessageError');
 
 const login = async (email, password) => {
   const { error } = validateLogin.validate({ email, password });

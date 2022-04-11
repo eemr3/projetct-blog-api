@@ -1,6 +1,6 @@
 const { User } = require('../models');
 const userValidate = require('../schemas/userSchema');
-const userError = require('../utils/userError');
+const userError = require('../utils/codeAndMessageError');
 
 const getAll = async () => {
   const users = await User.findAll({
