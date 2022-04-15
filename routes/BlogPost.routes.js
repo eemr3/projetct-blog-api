@@ -5,6 +5,7 @@ const { authMiddleware } = require('../middlewares/AuthenticateMiddleware');
 const routes = express.Router();
 
 routes.get('/', authMiddleware, BlogPostController.getAll);
+routes.get('/:id', authMiddleware, BlogPostController.getById);
 routes.post('/', authMiddleware, BlogPostController.create);
 
 module.exports = routes;
