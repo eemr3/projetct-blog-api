@@ -1,6 +1,21 @@
-const { Category, BlogPost } = require('../models');
+const { Category, BlogPost, User } = require('../models');
 const validateBlogPost = require('../schemas/blogPostSchema');
 const formatError = require('../utils/codeAndMessageError');
+
+const getAll = async (user) => {
+  const posts = await BlogPost.findAll({
+    where: { userId: user },
+    include: [
+      { model: User, as: 'user', attributes: { exclude: ['password'] } },
+      {
+        model: Category,
+        as: 'categories',
+        through: { attributes: [] },
+      },
+    ],
+  });
+  return posts;
+};
 
 const create = async ({ title, content, categoryIds, userId }) => {
   const { error } = validateBlogPost.validate({ title, content, categoryIds });
@@ -19,11 +34,10 @@ const create = async ({ title, content, categoryIds, userId }) => {
   
   await newPost.addCategory(category);
 
-  const { id } = newPost;
-
-  return { id, title, content, userId };
+  return newPost;
 };
 
 module.exports = {
   create,
+  getAll,
 };
