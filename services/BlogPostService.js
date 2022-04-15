@@ -17,6 +17,20 @@ const getAll = async (user) => {
   return posts;
 };
 
+const getById = async (id) => {
+  const post = await BlogPost.findOne({
+    where: { id },
+    include: [
+      { model: User, as: 'user', attributes: { exclude: ['password'] } },
+      { model: Category, as: 'categories', through: { attributes: [] } },
+    ],
+  });
+
+  if (!post) throw formatError(404, 'Post does not exist');
+
+  return post;
+};
+
 const create = async ({ title, content, categoryIds, userId }) => {
   const { error } = validateBlogPost.validate({ title, content, categoryIds });
   if (error) throw formatError(400, error.message);
@@ -40,4 +54,5 @@ const create = async ({ title, content, categoryIds, userId }) => {
 module.exports = {
   create,
   getAll,
+  getById,
 };
