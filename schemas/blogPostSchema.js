@@ -6,4 +6,9 @@ const validateBlogPost = Joi.object().keys({
   categoryIds: Joi.array().items(Joi.number()).required(),
 });
 
-module.exports = validateBlogPost;
+const validateBlogPostUpdate = Joi.object().keys({
+  title: Joi.string().not().empty().required(),
+  content: Joi.string().not().empty().required(),
+});
+
+module.exports = { validateBlogPost, validateBlogPostUpdate };
