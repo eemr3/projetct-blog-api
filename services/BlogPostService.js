@@ -1,5 +1,5 @@
 const { Category, BlogPost, User } = require('../models');
-const validateBlogPost = require('../schemas/blogPostSchema');
+const { validateBlogPost, validateBlogPostUpdate } = require('../schemas/blogPostSchema');
 const formatError = require('../utils/codeAndMessageError');
 
 const getAll = async (user) => {
@@ -51,8 +51,33 @@ const create = async ({ title, content, categoryIds, userId }) => {
   return newPost;
 };
 
+const update = async (user, id, body) => {
+  const { title, content } = body;
+  
+  if (body.categoryIds) throw formatError(400, 'Categories cannot be edited');
+
+  const { error } = validateBlogPostUpdate.validate({ title, content });
+  if (error) throw formatError(400, error.message);
+  const userIdBP = await BlogPost.findByPk(id);
+  console.log(userIdBP);
+  if (userIdBP.dataValues.userId !== Number(user)) {
+    throw formatError(401, 'Unauthorized user');
+  }
+  await BlogPost.update({ title, content }, { where: { userId: user, id } });
+  const postUpedated = await BlogPost.findOne({
+    where: { id },
+    include: [
+      { model: User, as: 'user', attributes: { exclude: ['password'] } },
+      { model: Category, as: 'categories', through: { attributes: [] } },
+    ],
+  });
+  
+  return postUpedated;
+};
+
 module.exports = {
   create,
   getAll,
   getById,
+  update,
 };
