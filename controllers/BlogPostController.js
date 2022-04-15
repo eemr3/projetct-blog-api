@@ -31,8 +31,23 @@ const create = async (req, res) => {
   }
 };
 
+const update = async (req, res) => { 
+  try {
+    const { id } = req.params;
+    // const { title, content } = req.body;
+    const user = req.data.id;
+    console.log('controller', user);
+    const post = await BlogPostService.update(user, id, req.body);
+
+    res.status(200).json(post);
+  } catch (error) {
+   return res.status(error.status).json({ message: error.message });
+  }
+};
+
 module.exports = {
-  create,
   getAll,
   getById,
+  create,
+  update,
 };
