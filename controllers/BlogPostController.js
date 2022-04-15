@@ -1,5 +1,11 @@
 const BlogPostService = require('../services/BlogPostService');
 
+const getAll = async (req, res) => {
+  const user = req.data.id;
+  const posts = await BlogPostService.getAll(user);
+  return res.status(200).json(posts);
+};
+
 const create = async (req, res) => {
   try {
     const { title, content, categoryIds } = req.body;
@@ -16,4 +22,5 @@ const create = async (req, res) => {
 
 module.exports = {
   create,
+  getAll,
 };
