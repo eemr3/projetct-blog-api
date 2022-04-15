@@ -7,5 +7,6 @@ const routes = express.Router();
 routes.get('/', authMiddleware, UserController.getAll);
 routes.get('/:id', authMiddleware, UserController.getById);
 routes.post('/', UserController.create);
+routes.delete('/me', authMiddleware, UserController.deleteUser);
 
 module.exports = routes;
