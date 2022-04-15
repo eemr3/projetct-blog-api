@@ -7,14 +7,15 @@ module.exports = {
         references: {
           model: 'BlogPosts',
           key: 'id',
-        }
+        },
+        onDelete: 'CASCADE',
       },
       categoryId: {
         type: Sequelize.INTEGER,
         references: {
           model: 'Categories',
           key: 'id',
-        }
+        },
       },
     });
   },
