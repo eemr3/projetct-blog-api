@@ -34,7 +34,6 @@ const create = async (req, res) => {
 const update = async (req, res) => { 
   try {
     const { id } = req.params;
-    // const { title, content } = req.body;
     const user = req.data.id;
     console.log('controller', user);
     const post = await BlogPostService.update(user, id, req.body);
@@ -45,9 +44,23 @@ const update = async (req, res) => {
   }
 };
 
+const deletePost = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = req.data.id;
+    await BlogPostService.deletePost(Number(id), Number(user));
+
+    return res.status(204).end();
+  } catch (error) {
+    console.log(error);
+    return res.status(error.status).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getAll,
   getById,
   create,
   update,
+  deletePost,
 };
