@@ -1,3 +1,4 @@
+const Sequelize = require('sequelize');
 const { Category, BlogPost, User } = require('../models');
 const { validateBlogPost, validateBlogPostUpdate } = require('../schemas/blogPostSchema');
 const formatError = require('../utils/codeAndMessageError');
@@ -29,6 +30,26 @@ const getById = async (id) => {
   if (!post) throw formatError(404, 'Post does not exist');
 
   return post;
+};
+
+const { Op } = Sequelize;
+const search = async (value, user) => {
+  if (!value) {
+    const posts = await getAll(user);
+    return posts;
+  }
+
+  const post = await BlogPost.findAll({
+    where: {
+      [Op.or]: [{ title: { [Op.like]: value } }, { content: { [Op.like]: value } }],
+    },
+    include: [
+      { model: User, as: 'user', attributes: { exclude: ['password'] } },
+      { model: Category, as: 'categories', through: { attributes: [] } },
+    ],
+  });
+  
+  return post || [];
 };
 
 const create = async ({ title, content, categoryIds, userId }) => {
@@ -87,6 +108,7 @@ module.exports = {
   create,
   getAll,
   getById,
+  search,
   update,
   deletePost,
 };
