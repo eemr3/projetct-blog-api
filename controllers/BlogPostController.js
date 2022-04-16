@@ -17,6 +17,14 @@ const getById = async (req, res) => {
   }
 };
 
+const search = async (req, res) => {
+  const { q } = req.query;
+  const user = req.data.id;
+  const result = await BlogPostService.search(q, user); 
+
+  return res.status(200).json(result);
+};
+
 const create = async (req, res) => {
   try {
     const { title, content, categoryIds } = req.body;
@@ -60,6 +68,7 @@ const deletePost = async (req, res) => {
 module.exports = {
   getAll,
   getById,
+  search,
   create,
   update,
   deletePost,
